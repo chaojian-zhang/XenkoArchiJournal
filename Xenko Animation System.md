@@ -18,5 +18,7 @@ See:
 1. [Skeletal Animation Asset Properties](https://doc.xenko.com/latest/jp/manual/animation/animation-properties.html)
     * **Notably:** **Type**, **Target Skeleton**, **Root Motion**
 2. [Control custom attributes with a script](https://doc.xenko.com/latest/en/manual/animation/custom-attributes.html#2-control-custom-attributes-with-a-script)
-3. https://doc.xenko.com/latest/jp/manual/animation/animation-scripts.html
-2. Also see animation related Code Snippets
+    * *Snippets on this page pending collection*
+3. [Animation Scripts](https://doc.xenko.com/latest/jp/manual/animation/animation-scripts.html)
+    * Snippet also available in [Snippets.md](Xenko Snippets.md)
+2. Also see other [animation related Code Snippets](Xenko Snippets.md#Animation)

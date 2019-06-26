@@ -10,13 +10,13 @@ In this document I will record both the **statements**, appropriate **usage** (*
 
 This document should not be read as a **receipe** (i.e. how to do certian things like tutorials) - although it definitely servers such a **reference purpose** - instead it is considered a **complementray** to the [architecture doucment](Xenko High Level Architecture.md).
 
-For graphics and shader related snippets, see **Xenko Shading Language Reference.md**.
+For **graphics** and **shader** related snippets, see **Xenko Shading Language Reference.md**.
 
 **Debugging Tip**
 
-1. Watch out for Game Studio output panel logging info
-2. Watch out for Console window error output (for the game instance)
-3. Use VS IDE to step through code
+1. Watch out for **Game Studio** **output panel** logging info
+2. Watch out for **Console window** error output (for the game instance)
+3. Use **VS IDE** to step through code
 
 **Engine Features**
 
@@ -28,9 +28,11 @@ For graphics and shader related snippets, see **Xenko Shading Language Reference
 
 # Snippets
 
-All snippets will be presented in an **ordered list** manner orderly **alphabetically** be their usage or **name** (in the format of an **action**), and tagged with **keywords**.
+All snippets will be presented in an **ordered list** manner sorted **alphabetically** be their usage or **name** (in the format of an **action**), and tagged with **keywords**.
 
-Notice in **Add Assets**, some premade scripts are available for things like **camera control** and **event handling**.
+Notice in **Game Studio-Add Assets**, some premade scripts are available for things like **camera control** and **event handling**.
+
+## General
 
 1. \[Scripting\] Add a Script to Entity
 
@@ -39,7 +41,7 @@ Notice in **Add Assets**, some premade scripts are available for things like **c
 myEntity.Add(new myAsyncScript());
 ```
 
-2. [Debug, Testing] Output quick test output
+2. \[Debug, Testing\] Output quick test output
 
 ```c#
 Console.WriteLine(entity.Name);
@@ -47,7 +49,7 @@ Console.WriteLine(entity.Name);
 
 Remark: Seriously, set breakpoint inside Visual Studio is more efficient.
 
-2. \[Scripting\] Async Script Looping Per Frame
+3. \[Scripting\] Async Script Looping Per Frame
 
 ```c#
 public class BasicAsyncScript : AsyncScript
@@ -81,7 +83,7 @@ Remark: Xenko doesn't run scripts **simultaneously**; they run **one at a time**
 
 Remark: Notice each **script component** is a **seperate instance** of the same script (class); This allows some concurrency.
 
-1. Access Files
+4. \[File\] Access Files
 
 ```c#
 Use VirtualFileSystem: https://doc.xenko.com/latest/en/api/Xenko.Core.IO.VirtualFileSystem.html
@@ -95,7 +97,7 @@ var gamesave2 = VirtualFileSystem.ApplicationRoaming.OpenStream("gamesave001.dat
 
 Remark: It's OK but we should be aware if some of the libraries we reference actually accessed files using raw runtime functions e.g. System.Database.SQLite.dll
 
-2. Create an Entity and Some Components
+5. \[Run-time Creation; ModelComponent\] Create an Entity and Some Components
 
 ```c#
 // Create entity
@@ -112,7 +114,7 @@ myEntity.Transformation.Translation = new Vector3(100.0f, 100.0f, 0.0f);
 Entities.Add(myEntity);
 ```
 
-2. Load Asset from Code
+6. \[Run-time Creation\] Load Asset from Code
 
 ```c#
 // Load a model (relative path; replace URL with valid URL)
@@ -174,7 +176,9 @@ Asset.Unload(secondReference); // decrease the reference counter and unload the 
 // The texture has been unloaded, it cannot be used here any more.
 ```
 
-1. Set window to borderless
+## Rendering
+
+1. \[Rendering\] Set window to borderless
 
 ```c#
 Add this line to any StartupScript after base.Start():
@@ -189,7 +193,7 @@ Remark: Other window related settings:
 Game.Window.AllowUserResizing = true;
 ```
 
-2. \[Physics\] Show colliders at runtime
+2. \[Rendering; Physics\] Show colliders at runtime
 
 ```c#
 // Intended for Debug Use
@@ -200,7 +204,22 @@ Remark: **Collider shapes** for infinite planes are always invisible.
 
 Remark: Notice **types** of physics/collision objects - **Kinematic objects** (animated, script and input controlled), **Kinematic triggers**, **Rigidbody colliders** (Physics simulation), **Rigidbody triggers**, **Static colliders**, **Static triggers**; Those objects *interact with each other*.
 
-3. \[Physics\] Move a Static Collider
+3. \[Camera\] Create a camera and assign a camera slot from a script
+
+```c#
+var camera = new CameraComponent();
+camera.Slot = SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId();
+```
+
+Remark: Always have at least one enabled camera
+
+Remark: Don't have multiple cameras enabled and assigned to the same slot at the same time
+
+Reference: [Camera Slots](https://doc.xenko.com/latest/en/manual/graphics/cameras/camera-slots.html)
+
+## Physics
+
+1. \[Physics\] Move a Static Collider
 
 ```c#
 PhysicsComponent.Entity.Transform.Position += PhysicsComponent.Entity.Transform.Position + Vector3.UnitX;
@@ -210,7 +229,7 @@ PhysicsComponent.UpdatePhysicsTransformation();
 
 Remark: Static collider provides **collision** and doesn't participate in **physics simulation** (notice collision and physics are interconnected but two seperate systems) but can be **moved**.
 
-4. \[Physics\] Add a Constraint
+2. \[Physics\] Add a Constraint
 
 ```c#
 // Link rigid body to the world at its current location
@@ -234,7 +253,7 @@ Remark: Constraints can either link two **rigidbodies** together, or link a sing
 
 Remark: Constraints can only be added in scripts.
 
-5. \[Physics/Collision\] Cast a Ray from the **mouse/cursor's screen position**
+3. \[Physics/Collision\] Cast a Ray from the **mouse/cursor's screen position**
 
 ```c#
 // To get and set the Simulation instance properties
@@ -290,43 +309,7 @@ Remark: Raytracing is used for - check which objects are in a gun's **line of fi
 
 Remark: Raycasting uses **colliders** to calculate intersections. It *ignores entities* that have no collider component.
 
-6. \[Camera\] Create a camera and assign a camera slot from a script
-
-```c#
-var camera = new CameraComponent();
-camera.Slot = SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId();
-```
-
-Remark: Always have at least one enabled camera
-
-Remark: Don't have multiple cameras enabled and assigned to the same slot at the same time
-
-Reference: [Camera Slots](https://doc.xenko.com/latest/en/manual/graphics/cameras/camera-slots.html)
-
-7. \[Input\] Detect Mouse Movement Since Last Frame
-
-```c#
-public class MouseInputScript : SyncScript
-{
-    public override void Update()
-    {
-        // If the left mouse button is pressed in this update, do something.
-        if (Input.IsMouseButtonDown(MouseButton.Left))
-        {   
-        }
-        // If the middle mouse button has been pressed since the last update, do something.
-        if (Input.IsMouseButtonPressed(MouseButton.Middle))
-        {  
-        }
-        //If the mouse moved more than 0.2 units of the screen size in X direction, do something.
-        if (Input.MouseDelta.X > 0.2f)
-        {
-        }
-    }
-}
-```
-
-6. \[Physics; Collision\] Create a Static Collision Trigger That Changes Scale when collided
+4. \[Physics; Collision\] Create a Static Collision Trigger That Changes Scale when collided
 
 ```c#
 Create a static collider trigger then use following Aync Script to detect events (through polling):
@@ -374,6 +357,31 @@ namespace TransformTrigger
 ```
 
 Remark: Notice instead of **subscribe** to some **collision event**, we use an **Async Script** to **poll** the event.
+
+## Input and Control
+
+1. \[Input\] Detect Mouse Movement Since Last Frame
+
+```c#
+public class MouseInputScript : SyncScript
+{
+    public override void Update()
+    {
+        // If the left mouse button is pressed in this update, do something.
+        if (Input.IsMouseButtonDown(MouseButton.Left))
+        {   
+        }
+        // If the middle mouse button has been pressed since the last update, do something.
+        if (Input.IsMouseButtonPressed(MouseButton.Middle))
+        {  
+        }
+        //If the mouse moved more than 0.2 units of the screen size in X direction, do something.
+        if (Input.MouseDelta.X > 0.2f)
+        {
+        }
+    }
+}
+```
 
 7. \[Rendering; Material\] Switch Material of Entity
 
