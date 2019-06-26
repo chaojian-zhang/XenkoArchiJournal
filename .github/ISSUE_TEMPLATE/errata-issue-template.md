@@ -7,4 +7,9 @@ assignees: ''
 
 ---
 
+**Note Name:** Name of note.md
+**Reason of Change:** Something is not correct..
 
+**Changes Details** 
+
+Details here...

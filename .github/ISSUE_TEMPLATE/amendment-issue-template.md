@@ -7,4 +7,8 @@ assignees: ''
 
 ---
 
+**Note Name:** Name of note.md
 
+**Changes Details** 
+
+Details here...
