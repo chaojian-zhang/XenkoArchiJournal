@@ -659,6 +659,39 @@ Remark: When the video isn't playing, Xenko displays the texture instead.
 
 Remark: For any given video, its **video** and **sound** are imported as seperate assets; But played together.
 
+5. \[UI, Font\] Create Texts using Fonts from Script
+
+```c#
+//  Load a SpriteFont
+var myFont = Content.Load<SpriteFont>("MyFont");
+
+// Write text on screen
+
+// create the SpriteBatch
+var spriteBatch = new SpriteBatch(GraphicsDevice);
+// don't forget the begin
+spriteBatch.Begin(GraphicsContext);
+// draw the text "Helloworld!" in red from the center of the screen
+spriteBatch.DrawString(myFont, "Helloworld!", new Vector2(0.5, 0.5), Color.Red);
+// don't forget the end
+spriteBatch.End();
+
+// Advanced text drawing: Draw the text "Hello world!" upside-down in red from the center of the screen
+spriteBatch.Begin(GraphicsContext);
+spriteBatch.DrawString(myFont, "Hello world!", new Vector2(0.5, 0.5), Color.Red, 0, new Vector2(0, 0), new Vector2(1,1), SpriteEffects.FlipVertically, 0);
+spriteBatch.End();
+```
+
+Remark: After a font asset is **compiled** it can be loaded as a `SpriteFont` instance using the `Xenko.Core.Serialization.Assets.ContentManager`. It contains all the options to display a text (**bitmaps**, **kerning**, **line spacing** etc).
+
+Remark: Once the font is loaded, you can display any text with a `SpriteBatch`. The `Xenko.Graphics.SpriteBatch.DrawString` method performs the draw.
+
+Remark: The various overloads of `DrawString` let you specify the text's **orientation**, **scale**, **depth**, **origin**, etc. You can also apply some `SpriteEffects` to the text (*None, FlipHorizontally, FlipVertically, FlipBoth*).
+
+Reference: (SpriteBatch)[https://doc.xenko.com/latest/en/manual/graphics/low-level-api/spritebatch.html]
+
+Reference (Sprite Fonts)[https://doc.xenko.com/latest/en/manual/graphics/sprite-fonts.html]
+
 ## Game Systems
 
 1. \[Game System Scripting\] Event Broading Casting and Receiving
@@ -695,6 +728,8 @@ string asyncData = await gameOverListenerWithData.ReceiveAsync();
 
 Remark: Event broading casting is one way from sender to all scripts; Listeners will catch the event and respond to it.
 
+## Un-Categorized
+
 2. \[Script\] Per Frame Update Object Property in Real Time (rather than framerate dependent)
 
 ```
@@ -704,8 +739,6 @@ public override void Update()
     var moveDist = GameSpeed * elapsedTime;
 }
 ```
-
-
 
 11. \[UI; Scene; Scene Management\] Load next Scene
 
@@ -859,7 +892,9 @@ Remark: Also use `Alt+Enter` to enter fullscreen, notice this will stretch the U
 
 Remark: To properly handle fullscreen, use 1) window resize event to handle UI redraw; 2) *Very likely (or not) there is a layout based, absolute/relative pixel resolution way of laying out UIs and scene elements*.
 
-19. \[Animation; Skeletal Animation\] Move the knight arm; Move bone from code; Animate skeleton in code
+## Animation
+
+1. \[Animation; Skeletal Animation\] Move the knight arm; Move bone from code; Animate skeleton in code
 
 ```
 Working
@@ -901,7 +936,7 @@ Notice: Notice there is a way to **bind objects** to **skeleton** bones using (M
 
 Reference: (This forum post)[https://forums.xenko.com/t/just-want-to-move-the-knight-arm/535]
 
-20. \[Animation; Skeletal Animation\] Setup Animation; Play default animation
+2. \[Animation; Skeletal Animation\] Setup Animation; Play default animation
 
 ```
 public class SimpleAnimationScript : StartupScript
@@ -915,7 +950,7 @@ public class SimpleAnimationScript : StartupScript
 
 Reference: See (Setup Animation)[https://doc.xenko.com/latest/jp/manual/animation/set-up-animations.html]
 
-21. \[Animation; Property Animation\] Create property procedural animation
+3. \[Animation; Property Animation\] Create property procedural animation
 
 ```
 // Instead of updating the property manually every frame, we could create an animation curve
@@ -976,7 +1011,8 @@ public class AnimationScript : StartupScript
 
 See: (Procedural Animation)[https://doc.xenko.com/latest/en/manual/animation/procedural-animation.html]
 
-22. \[Animation; Skeletal Animation\] Custom Blend Tree
+4. \[Animation; Skeletal Animation\] Custom Blend Tree
+
 ```c#
 public class AnimationBlendTree : SyncScript, IBlendTreeBuilder
 {
@@ -1072,13 +1108,14 @@ Remark: The templates First-person shooter, Third-person platformer and Top-down
 See: (Custom Blend Tree)[https://doc.xenko.com/latest/jp/manual/animation/custom-blend-trees.html]
 
 
-23. \[Animation; Skeletal Animation\] Control custom attributes with a script
+5. \[Animation; Skeletal Animation\] Control custom attributes with a script
 
 ```
+Pending;
 See (Control custom attributes with a script)[https://doc.xenko.com/latest/en/manual/animation/custom-attributes.html#2-control-custom-attributes-with-a-script]
 ```
 
-24. \[Animation; Skeletal Animation\] Example Animation Script
+6. \[Animation; Skeletal Animation\] Example Animation Script
 
 ```c#
 // This sample script assigns a simple animation to a character based on its walking speed
@@ -1131,41 +1168,7 @@ Remark: Xenko includes a pre-built AnimationStart script that can be used as a t
 
 See: (Animation Scripts)[https://doc.xenko.com/latest/jp/manual/animation/animation-scripts.html]
 
-22. \[UI, Font\] Create Texts using Fonts from Script
-
-```c#
-//  Load a SpriteFont
-var myFont = Content.Load<SpriteFont>("MyFont");
-
-// Write text on screen
-
-// create the SpriteBatch
-var spriteBatch = new SpriteBatch(GraphicsDevice);
-// don't forget the begin
-spriteBatch.Begin(GraphicsContext);
-// draw the text "Helloworld!" in red from the center of the screen
-spriteBatch.DrawString(myFont, "Helloworld!", new Vector2(0.5, 0.5), Color.Red);
-// don't forget the end
-spriteBatch.End();
-
-// Advanced text drawing: Draw the text "Hello world!" upside-down in red from the center of the screen
-spriteBatch.Begin(GraphicsContext);
-spriteBatch.DrawString(myFont, "Hello world!", new Vector2(0.5, 0.5), Color.Red, 0, new Vector2(0, 0), new Vector2(1,1), SpriteEffects.FlipVertically, 0);
-spriteBatch.End();
-```
-
-
-Remark: After a font asset is **compiled** it can be loaded as a `SpriteFont` instance using the `Xenko.Core.Serialization.Assets.ContentManager`. It contains all the options to display a text (**bitmaps**, **kerning**, **line spacing** etc).
-
-Remark: Once the font is loaded, you can display any text with a `SpriteBatch`. The `Xenko.Graphics.SpriteBatch.DrawString` method performs the draw.
-
-Remark: The various overloads of `DrawString` let you specify the text's **orientation**, **scale**, **depth**, **origin**, etc. You can also apply some `SpriteEffects` to the text (*None, FlipHorizontally, FlipVertically, FlipBoth*).
-
-Reference: (SpriteBatch)[https://doc.xenko.com/latest/en/manual/graphics/low-level-api/spritebatch.html]
-
-Reference (Sprite Fonts)[https://doc.xenko.com/latest/en/manual/graphics/sprite-fonts.html]
-
-23. \[2D; UI; Animation; Sprite\] Use sprites in a script
+7. \[2D; UI; Animation; Sprite\] Use sprites in a script
 
 ```c#
 // This script displays a sprite that advances to the next sprite in the index every second. After it reaches the end of the sprite index, it loops.
@@ -1201,6 +1204,7 @@ public class Animation : SyncScript
 
 Remark: Attach the script to an entity with a sprite component.
 
+## More Uncategorized
 
 24. \[Rendering, Camera\] Create a camera and assign a camera slot from a script
 
