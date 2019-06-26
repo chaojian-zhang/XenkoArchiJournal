@@ -217,6 +217,91 @@ Remark: Don't have multiple cameras enabled and assigned to the same slot at the
 
 Reference: [Camera Slots](https://doc.xenko.com/latest/en/manual/graphics/cameras/camera-slots.html)
 
+4. \[Rendering; Material\] Switch Material of Entity
+
+```c#
+private Material material1;
+private Material material2;
+
+// Make sure the materials are loaded 
+material1 = Content.Load<Material>("Sphere Material");
+material2 = Content.Load<Material>("Ground Material");
+
+// Change the material on the entity
+var trigger = Entity.Get<PhysicsComponent>(); // Get a component of the attached entity for the script
+trigger.Entity.Get<ModelComponent>().Materials[0] = material2;  // Get entity through component then get a different component
+```
+
+5. \[Rendering; Lighting; Texture\] Changes Skybox Light and its intensity
+
+```c#
+public Skybox skybox;
+public void ChangeSkyboxParameters()
+{
+    // Get the light component from an entity
+    var light = Entity.Get<LightComponent>();
+
+    // Get the Skybox Light settings from the light component
+    var skyboxLight = light.Type as LightSkybox;
+
+    // Replace the existing skybox
+    skyboxLight.Skybox = skybox;
+
+    // Change the skybox light intensity
+    light.Intensity = 1.5f;
+}
+```
+
+6. \[Rendering; Lighting; Texture\] Change the skybox at runtime
+
+```
+The following code changes the cubemap in a background:
+
+public Texture cubemapTexture;
+public void ChangeBackgroundParameters()
+{
+    // Get the background component from an entity
+    var background = directionalLight.Get<BackgroundComponent>();
+
+    // Replace the existing background
+    background.Texture = cubemapTexture;
+
+    // Change the background intensity
+    background.Intensity = 1.5f;
+}
+```
+
+7. \[Rendering; Shader\] Create Parametrically Controlled Shader
+
+```
+// First create a custom shader for the slot of material; See Xenko Shading Language Reference.
+// To modify the value at runtime, access and set it in the material parameter collection. For example, to change the Frequency, use:
+myMaterial.Passes[myPassIndex].Parameters.Set(ComputeColorWaveKeys.Frequency, MyFrequency);
+```
+
+8. \[Input\] Detect Keyboard Inputs
+
+```
+public class KeyboardEventsScript : SyncScript
+{
+    public override void Update()
+    {
+        //Perform an action in every update.
+        if (Game.IsRunning)
+        {
+            if (Input.IsKeyDown(Keys.Left)) // Or equivalently: Use InputManager.DownKeys
+            {
+                this.Entity.Transform.Position.X -= 0.1f;
+            }
+            if (Input.IsKeyDown(Keys.Right))
+            {
+                this.Entity.Transform.Position.X += 0.1f;
+            }
+        }
+    }
+}
+```
+
 ## Physics
 
 1. \[Physics\] Move a Static Collider
@@ -358,86 +443,7 @@ namespace TransformTrigger
 
 Remark: Notice instead of **subscribe** to some **collision event**, we use an **Async Script** to **poll** the event.
 
-## Input and Control
-
-1. \[Input\] Detect Mouse Movement Since Last Frame
-
-```c#
-public class MouseInputScript : SyncScript
-{
-    public override void Update()
-    {
-        // If the left mouse button is pressed in this update, do something.
-        if (Input.IsMouseButtonDown(MouseButton.Left))
-        {   
-        }
-        // If the middle mouse button has been pressed since the last update, do something.
-        if (Input.IsMouseButtonPressed(MouseButton.Middle))
-        {  
-        }
-        //If the mouse moved more than 0.2 units of the screen size in X direction, do something.
-        if (Input.MouseDelta.X > 0.2f)
-        {
-        }
-    }
-}
-```
-
-7. \[Rendering; Material\] Switch Material of Entity
-
-```c#
-private Material material1;
-private Material material2;
-
-// Make sure the materials are loaded 
-material1 = Content.Load<Material>("Sphere Material");
-material2 = Content.Load<Material>("Ground Material");
-
-// Change the material on the entity
-var trigger = Entity.Get<PhysicsComponent>(); // Get a component of the attached entity for the script
-trigger.Entity.Get<ModelComponent>().Materials[0] = material2;  // Get entity through component then get a different component
-```
-
-8. \[Rendering; Lighting; Texture\] Changes Skybox Light and its intensity
-
-```c#
-public Skybox skybox;
-public void ChangeSkyboxParameters()
-{
-    // Get the light component from an entity
-    var light = Entity.Get<LightComponent>();
-
-    // Get the Skybox Light settings from the light component
-    var skyboxLight = light.Type as LightSkybox;
-
-    // Replace the existing skybox
-    skyboxLight.Skybox = skybox;
-
-    // Change the skybox light intensity
-    light.Intensity = 1.5f;
-}
-```
-
-8. \[Rendering; Lighting; Texture\] Change the skybox at runtime
-
-```
-The following code changes the cubemap in a background:
-
-public Texture cubemapTexture;
-public void ChangeBackgroundParameters()
-{
-    // Get the background component from an entity
-    var background = directionalLight.Get<BackgroundComponent>();
-
-    // Replace the existing background
-    background.Texture = cubemapTexture;
-
-    // Change the background intensity
-    background.Intensity = 1.5f;
-}
-```
-
-8. \[Physics\] Detect trigger collisions
+5. \[Physics\] Detect trigger collisions
 
 ```
 // Wait for an entity to collide with the trigger
@@ -470,7 +476,65 @@ trigger.Collisions.CollectionChanged += (sender, args) =>
 };
 ```
 
-9. \[UI\] Assign a **UI page** to a **UI page component** in code
+## Input and Control
+
+1. \[Input\] Detect Mouse Movement Since Last Frame
+
+```c#
+public class MouseInputScript : SyncScript
+{
+    public override void Update()
+    {
+        // If the left mouse button is pressed in this update, do something.
+        if (Input.IsMouseButtonDown(MouseButton.Left))
+        {   
+        }
+        // If the middle mouse button has been pressed since the last update, do something.
+        if (Input.IsMouseButtonPressed(MouseButton.Middle))
+        {  
+        }
+        //If the mouse moved more than 0.2 units of the screen size in X direction, do something.
+        if (Input.MouseDelta.X > 0.2f)
+        {
+        }
+    }
+}
+```
+
+2. \[Input\] Create virtual buttons
+
+```
+public override void Start()
+{
+    base.Start();
+
+    // Create a new VirtualButtonConfigSet if none exists. 
+    Input.VirtualButtonConfigSet = Input.VirtualButtonConfigSet ?? new VirtualButtonConfigSet();
+
+    // Bind "M" key, GamePad "Start" button and left mouse button to a virtual button "MyVButton".
+    VirtualButtonBinding b1 = new VirtualButtonBinding("MyVButton", VirtualButton.Keyboard.M);
+    VirtualButtonBinding b2 = new VirtualButtonBinding("MyVButton", VirtualButton.GamePad.Start);
+    VirtualButtonBinding b3 = new VirtualButtonBinding("MyVButton", VirtualButton.Mouse.Left);
+
+    // Define behavior for the virtual button
+    VirtualButtonConfig c = new VirtualButtonConfig();
+    c.Add(b1);
+    c.Add(b2);
+    c.Add(b3);
+
+    // Add virtual button
+    Input.VirtualButtonConfigSet.Add(c);
+}
+
+public override void Update() {
+    // Use virtual button
+    float button = Input.GetVirtualButton(0, "MyVButton");  // Equivalent as, for example: Input.
+}
+```
+
+## UI
+
+1. \[UI\] Assign a **UI page** to a **UI page component** in code
 
 ```
 // This property can be assigned from a UI page asset in Game Studio
@@ -505,7 +569,7 @@ public void InitializeUI()
 ```
 
 
-9. \[UI\] Assign a UI library in code
+2. \[UI\] Assign a UI library in code
 
 ```
 // This property can be assigned from a UI library asset in Game Studio
@@ -533,7 +597,7 @@ public Button CreateButton()
 
 Remark: **UI pages** have only one root element. **UI libraries** can have multiple root elements.
 
-9. \[UI\] Dynamically 
+3. \[UI\] Dynamically ???
 
 ```
 /// <summary>
@@ -568,7 +632,7 @@ private TextBlock bonusCounter;
 bonusCounter = rootElement.FindVisualChildOfType<TextBlock>("bonusCounter");
 ```
 
-10. \[Video\] Play a Video on Surface of Mesh
+4. \[Video\] Play a Video on Surface of Mesh
 
 ```
 // After you set up the video component, play it from a script using:
@@ -595,7 +659,9 @@ Remark: When the video isn't playing, Xenko displays the texture instead.
 
 Remark: For any given video, its **video** and **sound** are imported as seperate assets; But played together.
 
-10. \[Game System Scripting\] Event Broading Casting and Receiving
+## Game Systems
+
+1. \[Game System Scripting\] Event Broading Casting and Receiving
 
 ```
 // Create an event
@@ -629,7 +695,7 @@ string asyncData = await gameOverListenerWithData.ReceiveAsync();
 
 Remark: Event broading casting is one way from sender to all scripts; Listeners will catch the event and respond to it.
 
-12. \[Script\] Per Frame Update Object Property in Real Time (rather than framerate dependent)
+2. \[Script\] Per Frame Update Object Property in Real Time (rather than framerate dependent)
 
 ```
 public override void Update()
@@ -639,67 +705,7 @@ public override void Update()
 }
 ```
 
-13. \[Rendering; Shader\] Create Parametrically Controlled Shader
 
-```
-// First create a custom shader for the slot of material; See Xenko Shading Language Reference.
-// To modify the value at runtime, access and set it in the material parameter collection. For example, to change the Frequency, use:
-myMaterial.Passes[myPassIndex].Parameters.Set(ComputeColorWaveKeys.Frequency, MyFrequency);
-```
-
-13. \[Input\] Detect Keyboard Inputs
-
-```
-public class KeyboardEventsScript : SyncScript
-{
-    public override void Update()
-    {
-        //Perform an action in every update.
-        if (Game.IsRunning)
-        {
-            if (Input.IsKeyDown(Keys.Left)) // Or equivalently: Use InputManager.DownKeys
-            {
-                this.Entity.Transform.Position.X -= 0.1f;
-            }
-            if (Input.IsKeyDown(Keys.Right))
-            {
-                this.Entity.Transform.Position.X += 0.1f;
-            }
-        }
-    }
-}
-```
-
-14. \[Input\] Create virtual buttons
-
-```
-public override void Start()
-{
-    base.Start();
-
-    // Create a new VirtualButtonConfigSet if none exists. 
-    Input.VirtualButtonConfigSet = Input.VirtualButtonConfigSet ?? new VirtualButtonConfigSet();
-
-    // Bind "M" key, GamePad "Start" button and left mouse button to a virtual button "MyVButton".
-    VirtualButtonBinding b1 = new VirtualButtonBinding("MyVButton", VirtualButton.Keyboard.M);
-    VirtualButtonBinding b2 = new VirtualButtonBinding("MyVButton", VirtualButton.GamePad.Start);
-    VirtualButtonBinding b3 = new VirtualButtonBinding("MyVButton", VirtualButton.Mouse.Left);
-
-    // Define behavior for the virtual button
-    VirtualButtonConfig c = new VirtualButtonConfig();
-    c.Add(b1);
-    c.Add(b2);
-    c.Add(b3);
-
-    // Add virtual button
-    Input.VirtualButtonConfigSet.Add(c);
-}
-
-public override void Update() {
-    // Use virtual button
-    float button = Input.GetVirtualButton(0, "MyVButton");  // Equivalent as, for example: Input.
-}
-```
 
 11. \[UI; Scene; Scene Management\] Load next Scene
 
