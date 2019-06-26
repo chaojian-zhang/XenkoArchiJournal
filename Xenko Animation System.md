@@ -11,10 +11,12 @@ With that in mind, there are several ways to represent animations in an efficien
 
 We shall also notice, the largest containing unit for such animations is the **scene** itself - by switching scenes we can essentially present different animations in a discrete manner.
 
+# References
 
 See:
 
-1. https://doc.xenko.com/latest/jp/manual/animation/animation-properties.html
-2. (Control custom attributes with a script)[https://doc.xenko.com/latest/en/manual/animation/custom-attributes.html#2-control-custom-attributes-with-a-script]
+1. [Skeletal Animation Asset Properties](https://doc.xenko.com/latest/jp/manual/animation/animation-properties.html)
+    * **Notably:** **Type**, **Target Skeleton**, **Root Motion**
+2. [Control custom attributes with a script](https://doc.xenko.com/latest/en/manual/animation/custom-attributes.html#2-control-custom-attributes-with-a-script)
 3. https://doc.xenko.com/latest/jp/manual/animation/animation-scripts.html
 2. Also see animation related Code Snippets

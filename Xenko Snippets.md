@@ -1,8 +1,14 @@
 # Overview
 
-**Snippets** are important: they are short and succint illustrative pieces of code that can sometimes reveal the internal workings of the system; their context and appropriate use are critical and they can just get the things done.
+**Snippets** are important: 
 
-In this document I will record both the **statements**, appropriate **usage** (where, when, how), and underlying meaning/implication/interaction with the **game systems**. This document should not be read as a receipe (although it definitely servers such a reference purpose), instead it is considered a complementray to the architecture doucment.
+1. They are short and succint **illustrative pieces** of code that can sometimes reveal the **internal workings** of the system; 
+2. Their context and **appropriate use** are critical for code organization and efficiency;
+3. They are the **fundamental building blocks** for functional games and they can just get the things done.
+
+In this document I will record both the **statements**, appropriate **usage** (*where, when, how*), and underlying **meaning/implication/interaction** with the **game systems**. 
+
+This document should not be read as a **receipe** (i.e. how to do certian things like tutorials) - although it definitely servers such a **reference purpose** - instead it is considered a **complementray** to the [architecture doucment](Xenko High Level Architecture.md).
 
 For graphics and shader related snippets, see **Xenko Shading Language Reference.md**.
 
