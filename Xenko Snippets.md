@@ -894,10 +894,10 @@ Remark: To properly handle fullscreen, use 1) window resize event to handle UI r
 
 ## Animation
 
-1. \[Animation; Skeletal Animation\] Move the knight arm; Move bone from code; Animate skeleton in code
+### \[Animation; Skeletal Animation; Procedural Animation\] Move the knight arm; Move bone from code; Animate skeleton in code; Procedural (skeletal) animation
 
-```
-Working
+```c#
+// Working
 var modelComponent = Entity.Get<ModelComponent>();
 
 for (int nodeIndex = 0; nodeIndex < modelComponent.Model.Skeleton.Nodes.Length; nodeIndex++)
@@ -911,7 +911,7 @@ for (int nodeIndex = 0; nodeIndex < modelComponent.Model.Skeleton.Nodes.Length; 
 }
 ```
 
-```
+```c#
 // Not working
 var modelComponent = Entity.Get();
 var transformComponent = Entity.Get();
@@ -930,15 +930,21 @@ foreach (var mesh in modelComponent.Model.Meshes)
 }`
 ```
 
-Remark: Notice this doesn't work if animation is playing, in which case it will overwrite any values that you set on any property that has animation.
+**Remark:** Notice this doesn't work *if animation is (already) playing*, in which case it will overwrite any values that you set on any property that has animation.
 
-Notice: Notice there is a way to **bind objects** to **skeleton** bones using (Model Node Links)[https://doc.xenko.com/latest/jp/manual/animation/model-node-links.html]
+**Notice:** Notice there is a way to **bind objects** to **skeleton** bones using [Model Node Links](https://doc.xenko.com/latest/jp/manual/animation/model-node-links.html); This can be useful for things like a character **holding a piece of weapon**
 
-Reference: (This forum post)[https://forums.xenko.com/t/just-want-to-move-the-knight-arm/535]
+**Reference:** [This forum post of original question](https://forums.xenko.com/t/just-want-to-move-the-knight-arm/535)
 
-2. \[Animation; Skeletal Animation\] Setup Animation; Play default animation
+A complete example with **input control** for *rotating a skeletal arm* in code:
+
+```c#
 
 ```
+
+### \[Animation; Skeletal Animation\] Setup Animation; Play default animation
+
+```c#
 public class SimpleAnimationScript : StartupScript
 {
     public override void Start()
@@ -950,9 +956,9 @@ public class SimpleAnimationScript : StartupScript
 
 Reference: See (Setup Animation)[https://doc.xenko.com/latest/jp/manual/animation/set-up-animations.html]
 
-3. \[Animation; Property Animation\] Create property procedural animation
+### \[Animation; Property Animation\] Create property procedural animation
 
-```
+```c#
 // Instead of updating the property manually every frame, we could create an animation curve
 // This snippet is operating on TransformComponent; LightComponent and RigidBodyComponent can also be animated this way
 public class AnimationScript : StartupScript
@@ -1008,10 +1014,9 @@ public class AnimationScript : StartupScript
 }
 ```
 
+See: [Procedural (Property) Animation](https://doc.xenko.com/latest/en/manual/animation/procedural-animation.html)
 
-See: (Procedural Animation)[https://doc.xenko.com/latest/en/manual/animation/procedural-animation.html]
-
-4. \[Animation; Skeletal Animation\] Custom Blend Tree
+### \[Animation; Skeletal Animation\] Custom Blend Tree
 
 ```c#
 public class AnimationBlendTree : SyncScript, IBlendTreeBuilder
@@ -1099,23 +1104,24 @@ public class AnimationBlendTree : SyncScript, IBlendTreeBuilder
 }
 ```
 
-Remark: The **AnimationComponent** has the property `AnimationComponent.BlendTreeBuilder`.
+**Remark:** The **AnimationComponent** has the property `AnimationComponent.BlendTreeBuilder`.
 
-Remark: If you want absolute control over which animations are played, how are they blended and what weights they have, you can create a script which inherits from IBlendTreeBuilder and assign it to the BlendTreeBuilder under your animation component. When the animation component is updated, it calls void BuildBlendTree(FastList<AnimationOperation> animationList) on your script instead of updating the animations itself. This allows you to choose any combination of animation clips, speeds and blends, but is also more difficult, as all the heavy lifting is now on the script side.
+**Remark:** If you want absolute control over which animations are played, how are they blended and what weights they have, you can create a script which inherits from IBlendTreeBuilder and assign it to the BlendTreeBuilder under your animation component. When the animation component is updated, it calls void BuildBlendTree(FastList<AnimationOperation> animationList) on your script instead of updating the animations itself. This allows you to choose any combination of animation clips, speeds and blends, but is also more difficult, as all the heavy lifting is now on the script side.
 
-Remark: The templates First-person shooter, Third-person platformer and Top-down RPG, included with Xenko, are examples of how to use custom blend trees.
+**Remark:** The templates First-person shooter, Third-person platformer and Top-down RPG, included with Xenko, are examples of how to use custom blend trees.
 
-See: (Custom Blend Tree)[https://doc.xenko.com/latest/jp/manual/animation/custom-blend-trees.html]
+**See:** (Custom Blend Tree)[https://doc.xenko.com/latest/jp/manual/animation/custom-blend-trees.html]
 
 
-5. \[Animation; Skeletal Animation\] Control custom attributes with a script
+### \[Animation; Skeletal Animation\] Control custom attributes with a script
 
+```c#
+// Pending
 ```
-Pending;
-See (Control custom attributes with a script)[https://doc.xenko.com/latest/en/manual/animation/custom-attributes.html#2-control-custom-attributes-with-a-script]
-```
 
-6. \[Animation; Skeletal Animation\] Example Animation Script
+**See:** [Control custom attributes with a script](https://doc.xenko.com/latest/en/manual/animation/custom-attributes.html#2-control-custom-attributes-with-a-script)
+
+### \[Animation; Skeletal Animation\] Example Animation Script (for animation playback control; not for procedural animation)
 
 ```c#
 // This sample script assigns a simple animation to a character based on its walking speed
@@ -1164,11 +1170,11 @@ namespace AdditiveAnimation
 }
 ```
 
-Remark: Xenko includes a pre-built AnimationStart script that can be used as a template to write your own animation scripts. Create it when create new asset choosing Add asset > Scripts > Animation start.
+**Remark:** Xenko includes a pre-built AnimationStart script that can be used as a template to write your own animation scripts. Create it when create new asset choosing Add asset > Scripts > Animation start.
 
-See: (Animation Scripts)[https://doc.xenko.com/latest/jp/manual/animation/animation-scripts.html]
+**See:** [Animation Scripts](https://doc.xenko.com/latest/jp/manual/animation/animation-scripts.html)
 
-7. \[2D; UI; Animation; Sprite\] Use sprites in a script
+### \[2D; UI; Animation; Sprite\] Use sprites in a script
 
 ```c#
 // This script displays a sprite that advances to the next sprite in the index every second. After it reaches the end of the sprite index, it loops.
@@ -1202,7 +1208,7 @@ public class Animation : SyncScript
 }
 ```
 
-Remark: Attach the script to an entity with a sprite component.
+**Remark:** Attach the script to an entity with a sprite component.
 
 ## More Uncategorized
 
