@@ -17,6 +17,7 @@ For **graphics** and **shader** related snippets, see **Xenko Shading Language R
 1. Watch out for **Game Studio** **output panel** logging info
 2. Watch out for **Console window** error output (for the game instance)
 3. Use **VS IDE** to step through code
+4. Notice per **Game Studio** only `float` **public properties** can be exposed to **scripts** - `doubles` are not supported (an error will appear in **output panel**)
 
 **Engine Features**
 
@@ -24,7 +25,6 @@ For **graphics** and **shader** related snippets, see **Xenko Shading Language R
     * Public properties of a script should be data only and shouldn't access runtime functions or properties e.g. Entity
 2. Use `[DataMemberIgnore]` to hide public properties in GameStudio properties panel
 3. Normal C++ classes can also be defined and used but they won't show as scripts
-
 
 # Snippets
 
@@ -300,6 +300,12 @@ public class KeyboardEventsScript : SyncScript
         }
     }
 }
+```
+
+9. \[Input\] Detect XBox Controller
+
+```
+Pending.
 ```
 
 ## Physics
