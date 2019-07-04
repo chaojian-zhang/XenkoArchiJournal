@@ -793,6 +793,8 @@ Remark: Make sure all the **scenes** you want to load are included in the build 
 
 Remark: When creating a new asset, a **Scene Streaming Script** is provided to steam a scene through trigger.
 
+Remark: One way to manage scens is to have an **empty root scene** and dynamically load/unload scenes, instead of changing the root scene itself.
+
 Reference: [Use the scene streaming script](https://doc.xenko.com/latest/en/manual/game-studio/load-scenes.html#use-the-scene-streaming-script)
 
 15. \[UI\] Adjust UI Backbuffer Size
@@ -938,7 +940,9 @@ foreach (var mesh in modelComponent.Model.Meshes)
 
 **Remark:** Notice this doesn't work *if animation is (already) playing*, in which case it will overwrite any values that you set on any property that has animation.
 
-**Notice:** Notice there is a way to **bind objects** to **skeleton** bones using [Model Node Links](https://doc.xenko.com/latest/jp/manual/animation/model-node-links.html); This can be useful for things like a character **holding a piece of weapon**
+**Notice:** Notice there is a way to **bind/attach objects** to **skeleton** bones using [Model Node Links](https://doc.xenko.com/latest/jp/manual/animation/model-node-links.html); This can be useful for things like a character **holding a piece of weapon**
+
+**Reference:** [Tutorial: Create a trail](https://doc.xenko.com/latest/jp/manual/particles/tutorials/create-a-trail.html)
 
 **Reference:** [This forum post of original question](https://forums.xenko.com/t/just-want-to-move-the-knight-arm/535)
 
