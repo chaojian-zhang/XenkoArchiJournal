@@ -484,29 +484,6 @@ trigger.Collisions.CollectionChanged += (sender, args) =>
 
 ## Input and Control
 
-1. \[Input\] Detect Mouse Movement Since Last Frame
-
-```c#
-public class MouseInputScript : SyncScript
-{
-    public override void Update()
-    {
-        // If the left mouse button is pressed in this update, do something.
-        if (Input.IsMouseButtonDown(MouseButton.Left))
-        {   
-        }
-        // If the middle mouse button has been pressed since the last update, do something.
-        if (Input.IsMouseButtonPressed(MouseButton.Middle))
-        {  
-        }
-        //If the mouse moved more than 0.2 units of the screen size in X direction, do something.
-        if (Input.MouseDelta.X > 0.2f)
-        {
-        }
-    }
-}
-```
-
 2. \[Input\] Create virtual buttons
 
 ```
@@ -537,6 +514,53 @@ public override void Update() {
     float button = Input.GetVirtualButton(0, "MyVButton");  // Equivalent as, for example: Input.
 }
 ```
+
+1. \[Input\] Detect Mouse Movement Since Last Frame
+
+```c#
+public class MouseInputScript : SyncScript
+{
+    public override void Update()
+    {
+        // If the left mouse button is pressed in this update, do something.
+        if (Input.IsMouseButtonDown(MouseButton.Left))
+        {   
+        }
+        // If the middle mouse button has been pressed since the last update, do something.
+        if (Input.IsMouseButtonPressed(MouseButton.Middle))
+        {  
+        }
+        //If the mouse moved more than 0.2 units of the screen size in X direction, do something.
+        if (Input.MouseDelta.X > 0.2f)
+        {
+        }
+    }
+}
+```
+
+3. \[Input\] Hide Mouse Cursor when click (e.g. for moving camera), and lock mouse cursor position
+
+```c#
+if (Input.HasMouse)
+{
+    // Rotate with mouse
+    if (Input.IsMouseButtonDown(MouseButton.Right))
+    {
+        Input.LockMousePosition();
+        Game.IsMouseVisible = false;
+
+        yaw -= Input.MouseDelta.X * MouseRotationSpeed.X;
+        pitch -= Input.MouseDelta.Y * MouseRotationSpeed.Y;
+    }
+    else
+    {
+        Input.UnlockMousePosition();
+        Game.IsMouseVisible = true;
+    }
+}
+```
+
+**Reference**: See `BasicCameraController.cs` stock script.
 
 ## UI
 
@@ -727,7 +751,7 @@ if(gameOverListenerWithData.TryReceive(out string data))
 }
 
 // Or in Async
-await gameOverListener.ReceiveAsync();
+await gameOverListener.ReceiveAsync();  // Or gameOverListener.TryReceive() which blocks?
 string asyncData = await gameOverListenerWithData.ReceiveAsync();
 // asyncData == "Player 1"
 ```

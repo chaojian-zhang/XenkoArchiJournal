@@ -24,6 +24,22 @@ In this document we provide an overview and server as a to-practice list for som
     * [Custom scene renderers](https://doc.xenko.com/latest/jp/manual/graphics/graphics-compositor/custom-scene-renderers.html)
     * [Debug renderer](https://doc.xenko.com/latest/jp/manual/graphics/graphics-compositor/debug-renderers.html)
 
+# Topics
+
+## Shadow Map Resolution
+
+Shadows (maps) are controlled by: **MeshComponent**'s Case Shadow option, **LightComponent**'s Shadow property. Only **lights** (specifically **directional lights**, **point lights**, and **spot lights**) can cast shadows.
+
+Xenko creates a **shadow map** for **each light** that casts shadows. Light **Shadow options** can configure **shadow map size**, but there is an pretty small upper bound around 2K. However, the **actual display quality** of such shadow maps is not just affected by **shadow map resolution** of the given light, but also on the (size and quantity of) **shadow receiving objects**. Shadow maps are shared by all instances of **shadow receiving objects** (*all mesh objects receive shadows*), and the shadow resolution on each of object's surface is greatly limited by its share of shadow map - and this share is deteremined by ??? (*texture size of the object? By the way does object require UV unwrapping to receive shaodws?*). For efficient packing, use **Prefabs** and **Prefab models** for optimized draw calls, but this won't help with **shadow map resolution**.
+
+A decision must be made to control **effective shadow region**, in **UE4** this is done by **LightmassImportanceVolume**, which limits the lighting and shadowing for **dynamic lighting** - notice in UE4 the rest of the scene is usually baked lighting which depending entirely on **shadow map resolution of individual assets**. In open world settings it's thus important to utilize both **baked shadows** and **localized dynamic lights**. UE4 handles it better.
+
+Reference: [Shadow Maps in Xenko](https://doc.xenko.com/latest/en/manual/graphics/lights-and-shadows/shadows.html). From this documentation it seems that **shadow atlas** is shared among **all lights** and thus greatly limited in size. This shouldn't be a problem depending on context because usually the *actual viewport size is no larger than the shadow size* thus per render-wise speaking that should suffice.
+
+## Graphics Compositor - Add a secondary camera
+
+
+
 # Generic Applications
 
 1. \[Pending Review\](What is the best way to unwrap a sphere?

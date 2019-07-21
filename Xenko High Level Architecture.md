@@ -140,6 +140,14 @@ To use a script, **attach the script to an entity in the scene** (e.g. for non-g
 
 As remark on this approach, i.e. setting the script on a *per scene* as a distinct **scene entity** versus setting scripts as **Scene asset properties** or at the **engine level** - for instance in Unreal Engine we set **Start/Defaut GameMode (Class)** and **Default Game Controller (Class)** and **Default Map (Asset)** etc. - in sacrifice of **one Entity Transform Component** (for the **empty entity**), we obtain great flexibility and localized managebility because things are relevant where they need to be. The same pattern is observed for **Global Game Settings** which is implemented as a **Game Settings asset** (instead of, for instance, through some UI-bound **configuration menus**). We observe this pattern as resource-based configuration, and it promotes flexibility, like how **Visual Studio Code** and **Sublime Text** configures its components using **text files** (and both are very useful text editors).
 
+**Types of Scripts**
+
+There are three [types of user-created scripts](https://doc.xenko.com/latest/en/manual/scripts/types-of-script.html) in Xenko: startup scripts, synchronous scripts, and asynchronous scripts. Besides these, normal c# classes can be created but those *won't be registered with **script system***.
+
+One important thing about scripts is **script execution order**, especially when one script depend on another, e.g. for **sync scripts** which need to be updated every frame and use `EventKey` and `EventReceiver` to communicate data. In this case, **script priority** can be sent in **entity components**. Also see [Scheduling and Priorities](https://doc.xenko.com/latest/en/manual/scripts/scheduling-and-priorities.html).
+
+By the way **events** are used like **buffers**, and it's a convinient way to **share data** without explicitly **specify a target** or **shared data structure** (when execution order is well-defined). Otherwise it's used for signaling purpose. Example see **FPSTemplate** `PlayerController`, `InputController` and `AnimationController`.
+
 ## Rendering Pipeline (Request for Review; Request for Simplification)
 
 Easily customizable items throughout the rendering pipeline includes: ... (windows border)
