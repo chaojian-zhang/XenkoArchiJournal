@@ -35,3 +35,18 @@ Summary:
 Reference: [Render Texture](https://doc.xenko.com/latest/jp/manual/graphics/graphics-compositor/render-textures.html)
 
 Also See: Skeletal Animation Sample Project
+
+# Tackling Problems
+
+## \[Rendering\] How to use Graphics Compositor
+
+References: 
+
+1. https://doc.xenko.com/latest/en/manual/graphics/cameras/camera-slots.html
+2. https://doc.xenko.com/latest/en/manual/graphics/graphics-compositor/debug-renderers.html
+3. https://doc.xenko.com/latest/en/manual/graphics/graphics-compositor/scene-renderers.html
+4. https://doc.xenko.com/latest/en/manual/graphics/rendering-pipeline/index.html
+5. https://doc.xenko.com/latest/en/manual/graphics/low-level-api/index.html
+6. https://doc.xenko.com/latest/en/manual/graphics/effects-and-shaders/index.html
+
+## \[Rendering\] How to setup custom shader, without error or causing the game unable to run
